@@ -12,7 +12,7 @@ public class PenguinAnimationManager : Singleton<PenguinAnimationManager>
     {
         base.Awake();
         _platformController = FindObjectOfType<PlatformController>();
-        _platformController.PlatformMoved += OnPlatformMoved;
+        _platformController.PlatformRotated += OnPlatformMoved;
     }
 
     private void Start()
@@ -22,7 +22,7 @@ public class PenguinAnimationManager : Singleton<PenguinAnimationManager>
 
     override protected void OnDestroy()
     {
-        _platformController.PlatformMoved -= OnPlatformMoved;
+        _platformController.PlatformRotated -= OnPlatformMoved;
         if (PenguinFSM.Instance != null)
         {
             PenguinFSM.Instance.StateChanged -= OnStateChanged;

@@ -14,18 +14,18 @@ public class PlatformController : MonoBehaviour
     private float _maxRotation;
     [SerializeField]
     private bool _run;
-    private bool _canSwipe;
+    private bool _canFlip;
     private float _zCurrent = 0f;
 
     /// <summary>
     /// Invoked when the player rotates the platform. Provides direction of the rotation. -1 for left, 1 for right and 0 for no rotation.
     /// </summary>
-    public event Action<int> PlatformMoved;
+    public event Action<int> PlatformRotated;
 
     internal void Awake()
     {
         _run = true;
-        _canSwipe = true;
+        _canFlip = true;
         _minRotation = 0 - _maxRotationAngleClamped;
         _maxRotation = _maxRotationAngleClamped;
         Obstacle.ObstacleHit += OnObstacleHit;
@@ -79,18 +79,19 @@ public class PlatformController : MonoBehaviour
         {
             direction = 1;
         }
-        PlatformMoved?.Invoke(direction);
+        PlatformRotated?.Invoke(direction);
     }
 
     private void OnPlayerSwiped(SwipeDirection direction)
     {
-        if (PenguinFSM.Instance.GetCurrentState() == PenguinStates.Sliding)
+        var penguinState = PenguinFSM.Instance.GetCurrentState();
+        if (penguinState == PenguinStates.Sliding)
         {
-            if (_canSwipe)
+            if (_canFlip)
             {
-                _canSwipe = false;
+                _canFlip = false;
                 _run = false;
-                Rotate(direction);
+                Flip(direction);
             }
         }
     }
@@ -103,7 +104,7 @@ public class PlatformController : MonoBehaviour
                 ResetMinMaxRotations();
                 break;
             case PenguinStates.Land:
-                _canSwipe = true;
+                _canFlip = true;
                 // ResetMinMaxRotations();
                 break;
         }
@@ -117,15 +118,13 @@ public class PlatformController : MonoBehaviour
         LeanTween.value(this.gameObject, _maxRotation, targetMaxRotation, 0.2f).setOnUpdate(x => _maxRotation = x);
     }
 
-    private void Rotate(SwipeDirection direction)
+    private void Flip(SwipeDirection direction)
     {
         _minRotation = 0 - _maxRotationAngleUnclamped;
         _maxRotation = _maxRotationAngleUnclamped;
         float targetZRot = direction == SwipeDirection.Left ? _maxRotationAngleUnclamped : 0 - _maxRotationAngleUnclamped;
-
-        transform.LeanRotateZ(targetZRot, 0.2f).setOnComplete(() => { _run = true; _zCurrent = targetZRot; });
-
-        Debug.Log("rotating");
+        float time = 0.2f;
+        transform.LeanRotateZ(targetZRot, time).setOnComplete(() => { _run = true; _zCurrent = targetZRot; });
     }
 
     private void OnObstacleHit(Obstacle obstacle)

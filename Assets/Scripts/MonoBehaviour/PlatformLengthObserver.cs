@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlatformLengthObserver : MonoBehaviour
 {
-    [Tooltip("After distance between the penguin and the last instentiated platform reaches this value a new platform will be added.")]
+    [Tooltip("After the distance between the penguin and the last instentiated platform reaches this value a new platform will be added.")]
     [SerializeField]
     private float _distanceThreshold = 150f;
 

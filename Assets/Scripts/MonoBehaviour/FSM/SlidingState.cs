@@ -73,11 +73,11 @@ public class SlidingState : PenguinState
                     }
                     else if (AboveVoid())
                     {
-                        if (Penguin.Instance.Position.y < -2f)
-                        {
+                        // if (Penguin.Instance.Position.y < -2f)
+                        // {
                             PenguinFSM.Instance.SetFly(true);
                             PenguinFSM.Instance.EnterState(PenguinStates.Ascend);
-                        }
+                        // }
                     }
                 }
             }
