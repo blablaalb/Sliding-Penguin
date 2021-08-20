@@ -44,7 +44,9 @@ public class PlatformChunkManager : GenericPool<PlatformChunk>
     {
         var platformChunk = GetRandomPlatformChunk();
         platformChunk.SetParent(this.transform);
-
+        Vector3 position = new Vector3(LastPlatformChunk.Position.x, LastPlatformChunk.Position.y, LastPlatformChunk.Position.z + LastPlatformChunk.CalculateLength());
+        platformChunk.SetGlobalPosition(position);
+        platformChunk.SetLocalRotation(Quaternion.identity);
         LastPlatformChunk = platformChunk;
         return platformChunk;
     }
@@ -64,9 +66,7 @@ public class PlatformChunkManager : GenericPool<PlatformChunk>
         int indx = Random.Range(0, _platformChunks.Length);
         PlatformChunk chunk = _platformChunks[indx];
         prefab = chunk.gameObject;
-        Vector3 position = new Vector3(LastPlatformChunk.Position.x, LastPlatformChunk.Position.y, LastPlatformChunk.Position.z + LastPlatformChunk.CalculateLength());
         chunk = Get();
-        chunk.SetPosition(position);
         return chunk;
     }
 

@@ -97,14 +97,19 @@ public class PlatformChunk : MonoBehaviour
         transform.SetParent(parent);
     }
 
-    public void SetPosition(Vector3 position)
+    public void SetGlobalPosition(Vector3 position)
     {
         transform.position = position;
     }
 
-    public void SetRotation(Quaternion rotation)
+    public void SetGlobalRotation(Quaternion rotation)
     {
         transform.rotation = rotation;
+    }
+
+    public void SetLocalRotation(Quaternion rotation)
+    {
+        transform.localRotation = rotation;
     }
 
     // TODO: add score count.
