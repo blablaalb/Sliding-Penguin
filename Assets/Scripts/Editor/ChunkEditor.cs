@@ -44,7 +44,7 @@ public class ChunkEditor : Editor
                 for (int i = 0; i < _generateAmount; i++)
                 {
                     GameObject newChunkGO = Instantiate<GameObject>(_targetChunk.gameObject);
-                    newChunkGO = newChunkGO.GetComponent<PlatformChunkVariationManager>().SpawnRandomVariation().gameObject;
+                    newChunkGO = newChunkGO.GetComponent<PlatformChunk>().SpawnRandomVariation().gameObject;
                     PlatformChunk lastPlatformChunk = GetLastPlatformChunk();
                     newChunkGO.transform.position = GetChunkEndInZAxis(lastPlatformChunk);
                     newChunkGO.transform.SetParent(_targetChunk.transform.parent);

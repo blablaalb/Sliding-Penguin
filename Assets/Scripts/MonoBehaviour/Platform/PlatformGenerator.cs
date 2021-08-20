@@ -1,18 +1,31 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 public class PlatformGenerator : Singleton<PlatformGenerator>
 {
     [SerializeField]
     private Platform _platformPrefab;
+    private PlatformLengthObserver _platformLengthObserver;
 
     public Platform LastPlatform { get; private set; }
 
-    private Platform GeneratePlatform()
+    override protected void Awake()
     {
-        Platform platform = AddPlatform();
-        return platform;
+        base.Awake();
+        _platformLengthObserver = GetComponent<PlatformLengthObserver>();
+        FindLastPlatform();
+    }
+
+    public Platform[] AddPlatforms(int amount)
+    {
+        Platform[] platforms = new Platform[amount];
+        for (int i = 0; i < amount; i++)
+        {
+            platforms[i] = AddPlatform();
+        }
+        return platforms;
     }
 
     public Platform AddPlatform()
@@ -31,4 +44,14 @@ public class PlatformGenerator : Singleton<PlatformGenerator>
         LastPlatform = platform;
         return platform;
     }
+
+    private bool FindLastPlatform()
+    {
+        var platforms = FindObjectsOfType<Platform>();
+        if (platforms == null || platforms.Length <= 0) return false;
+        var last = platforms.OrderBy(x => x.Position.z).Last();
+        LastPlatform = last;
+        return true;
+    }
+
 }

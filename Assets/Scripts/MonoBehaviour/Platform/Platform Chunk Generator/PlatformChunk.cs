@@ -6,8 +6,15 @@ public class PlatformChunk : MonoBehaviour
 {
     [SerializeField]
     private int _difficulty;
+    [SerializeField]
+    private PlatformChunk[] _chunkVaritations;
 
     public int Difficulty => _difficulty;
+    /// <summary>
+    /// Amount of variations.
+    /// </summary>
+    public int PlatformVariationsCount => _chunkVaritations.Length;
+
 
     /// <summary>
     /// Returns number of platform instances that are in this chunk.
@@ -59,6 +66,24 @@ public class PlatformChunk : MonoBehaviour
         int platforms = GetPlatformsCount();
         float length = Platform.LENGTH * (gaps + platforms);
         return length;
+    }
+
+    /// <summary>
+    /// Disables crrent chunk, instantiates a new one and return reference to it.
+    /// </summary>
+    /// <returns>Reference to the new instantiated platform chunk.</returns>
+    public PlatformChunk SpawnRandomVariation()
+    {
+        if (PlatformVariationsCount <= 0)
+        {
+            return this.gameObject.GetComponent<PlatformChunk>();
+        }
+        int randomIndx = UnityEngine.Random.Range(0, _chunkVaritations.Length);
+        PlatformChunk randomChunk = _chunkVaritations[randomIndx];
+        randomChunk = Instantiate<PlatformChunk>(randomChunk);
+        randomChunk.gameObject.transform.SetParent(transform.parent);
+        gameObject.SetActive(false);
+        return randomChunk;
     }
 
     // TODO: add score count.
