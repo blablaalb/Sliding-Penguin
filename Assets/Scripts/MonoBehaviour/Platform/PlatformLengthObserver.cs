@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlatformLengthObserver : MonoBehaviour
@@ -7,8 +8,14 @@ public class PlatformLengthObserver : MonoBehaviour
     [Tooltip("After the distance between the penguin and the last instentiated platform reaches this value a new platform will be added.")]
     [SerializeField]
     private float _distanceThreshold = 150f;
+    private PlatformChunkManager _platformChunksManager;
 
     public event Action ReachedThreshold;
+
+    internal void Awake()
+    {
+        _platformChunksManager = FindObjectOfType<PlatformChunkManager>();
+    }
 
     internal void OnDestroy()
     {
@@ -29,7 +36,8 @@ public class PlatformLengthObserver : MonoBehaviour
     /// <returns>True if distance is less or equal to the threshold. False otherwise.</returns>
     public bool HasReachedThreshold()
     {
-        Platform lastPlatform = PlatformGenerator.Instance.LastPlatform;
+        var lastPlatformChunk = _platformChunksManager.LastPlatformChunk;
+        Platform lastPlatform = lastPlatformChunk.GetLastPlatform();
         if (lastPlatform != null)
         {
             Vector3 lastPlatformPosition = lastPlatform.Position;

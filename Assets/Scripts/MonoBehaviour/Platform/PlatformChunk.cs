@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 public class PlatformChunk : MonoBehaviour
 {
@@ -14,7 +15,12 @@ public class PlatformChunk : MonoBehaviour
     /// Amount of variations.
     /// </summary>
     public int PlatformVariationsCount => _chunkVaritations.Length;
+    public Vector3 Position => transform.position;
 
+
+    public Platform[] GetPlatforms() => transform.GetComponentsInChildren<Platform>();
+
+    public Platform GetLastPlatform() => GetPlatforms().Last();
 
     /// <summary>
     /// Returns number of platform instances that are in this chunk.
@@ -84,6 +90,21 @@ public class PlatformChunk : MonoBehaviour
         randomChunk.gameObject.transform.SetParent(transform.parent);
         gameObject.SetActive(false);
         return randomChunk;
+    }
+
+    public void SetParent(Transform parent)
+    {
+        transform.SetParent(parent);
+    }
+
+    public void SetPosition(Vector3 position)
+    {
+        transform.position = position;
+    }
+
+    public void SetRotation(Quaternion rotation)
+    {
+        transform.rotation = rotation;
     }
 
     // TODO: add score count.
