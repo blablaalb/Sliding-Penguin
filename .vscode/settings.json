@@ -1,4 +1,4 @@
-﻿{
+{
     "files.exclude":
     {
         "**/.DS_Store":true,
@@ -52,5 +52,10 @@
         "ProjectSettings/":true,
         "temp/":true,
         "Temp/":true
-    }
+    },
+    "favorites.resources": [
+        "Assets\\DOCS\\NOTES.md",
+        "Assets\\DOCS\\FIXME.md",
+        "Assets\\DOCS\\TODO.md"
+    ]
 }

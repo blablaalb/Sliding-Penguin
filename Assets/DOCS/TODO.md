@@ -1,3 +1,2 @@
-## InputManager:
-- Increase sensitivity after player swipes on the screen
-- 
+- Camera adjustment when the penguin flies 
+- FInish `PlatformChunkManager`. Generate more difficult chunk later in the game.

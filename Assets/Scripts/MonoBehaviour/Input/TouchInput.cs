@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class TouchInput : Singleton<TouchInput>
+public class TouchInput : Singleton<TouchInput>, IInput
 {
     private Vector2 _startPosition;
     private Vector2 _currentPosition;
@@ -47,7 +47,7 @@ public class TouchInput : Singleton<TouchInput>
         if (x != 0f)
             x = Mathf.SmoothDamp(_previousX, x, ref _xVelocity, _smooth);
         _previousX = x;
-        return x;
+        return rawx;
     }
 
     internal void Update()

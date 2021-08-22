@@ -1,33 +1,29 @@
 ﻿﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
+using NaughtyAttributes;
 
 public class PlatformController : MonoBehaviour
 {
     [SerializeField]
-    private float _rotateSpeed;
-    [SerializeField]
     private float _maxRotationAngleClamped = 90f;
     [SerializeField]
     private float _maxRotationAngleUnclamped = 110f;
-    private float _minRotation;
-    private float _maxRotation;
     [SerializeField]
     private bool _run;
-    private bool _canFlip;
-    private float _zCurrent = 0f;
+    [SerializeField]
+    private float _rotateTime = 0.5f;
+    private float _targetZ;
 
     /// <summary>
     /// Invoked when the player rotates the platform. Provides direction of the rotation. -1 for left, 1 for right and 0 for no rotation.
     /// </summary>
     public event Action<int> PlatformRotated;
 
+
     internal void Awake()
     {
         _run = true;
-        _canFlip = true;
-        _minRotation = 0 - _maxRotationAngleClamped;
-        _maxRotation = _maxRotationAngleClamped;
         Obstacle.ObstacleHit += OnObstacleHit;
     }
 
@@ -50,85 +46,62 @@ public class PlatformController : MonoBehaviour
         }
     }
 
-    internal void FixedUpdate()
-    {
-        if (!_run)
-        {
-            return;
-        }
+    private void OnPlayerSwiped(SwipeDirection direction) { }
 
-        HandleInput();
-    }
-
-    private void HandleInput()
-    {
-        float x = InputManager.Instance.GetXAxis();
-        float zAxisRotation = x * Time.deltaTime * _rotateSpeed;
-        _zCurrent -= zAxisRotation;
-
-        _zCurrent = Mathf.Clamp(_zCurrent, _minRotation, _maxRotation);
-        transform.localRotation = Quaternion.Euler(new Vector3(0f, 0f, _zCurrent));
-
-
-        int direction = 0;
-        if (x < 0.000f)
-        {
-            direction = -1;
-        }
-        else if (x > 0.000f)
-        {
-            direction = 1;
-        }
-        PlatformRotated?.Invoke(direction);
-    }
-
-    private void OnPlayerSwiped(SwipeDirection direction)
-    {
-        var penguinState = PenguinFSM.Instance.GetCurrentState();
-        if (penguinState == PenguinStates.Sliding)
-        {
-            if (_canFlip)
-            {
-                _canFlip = false;
-                _run = false;
-                Flip(direction);
-            }
-        }
-    }
-
-    private void OnPenguinStateChanged(PenguinStates state)
-    {
-        switch (state)
-        {
-            case PenguinStates.Descend:
-                ResetMinMaxRotations();
-                break;
-            case PenguinStates.Land:
-                _canFlip = true;
-                // ResetMinMaxRotations();
-                break;
-        }
-    }
-
-    private void ResetMinMaxRotations()
-    {
-        float targetMinRotation = 0 - _maxRotationAngleClamped;
-        float targetMaxRotation = _maxRotationAngleClamped;
-        LeanTween.value(this.gameObject, _minRotation, targetMinRotation, 0.2f).setOnUpdate(x => _minRotation = x);
-        LeanTween.value(this.gameObject, _maxRotation, targetMaxRotation, 0.2f).setOnUpdate(x => _maxRotation = x);
-    }
-
-    private void Flip(SwipeDirection direction)
-    {
-        _minRotation = 0 - _maxRotationAngleUnclamped;
-        _maxRotation = _maxRotationAngleUnclamped;
-        float targetZRot = direction == SwipeDirection.Left ? _maxRotationAngleUnclamped : 0 - _maxRotationAngleUnclamped;
-        float time = 0.2f;
-        transform.LeanRotateZ(targetZRot, time).setOnComplete(() => { _run = true; _zCurrent = targetZRot; });
-    }
+    private void OnPenguinStateChanged(PenguinStates state) { }
 
     private void OnObstacleHit(Obstacle obstacle)
     {
         _run = false;
+    }
+
+#if UNITY_EDITOR
+    [Button]
+#endif
+    // rotates the platform RIGHT so the penguin appears on the left side of the screen
+    public void RotateQuarterLeft()
+    {
+        float newTargetZ = _targetZ;
+        if (newTargetZ >= -_maxRotationAngleClamped && newTargetZ <= _maxRotationAngleClamped)
+        {
+            if (newTargetZ >= -_maxRotationAngleUnclamped && newTargetZ < _maxRotationAngleClamped)
+                newTargetZ += _maxRotationAngleClamped;
+            else if (newTargetZ == _maxRotationAngleClamped)
+                newTargetZ = _maxRotationAngleUnclamped;
+        }
+        else // if penguin is flying
+        {
+            if (newTargetZ == -_maxRotationAngleUnclamped) newTargetZ = -_maxRotationAngleClamped;
+        }
+        if (newTargetZ != _targetZ)
+        {
+            _targetZ = newTargetZ;
+            LeanTween.rotateZ(this.gameObject, _targetZ, _rotateTime);
+        }
+    }
+
+#if UNITY_EDITOR
+    [Button]
+# endif
+    // rotates the platform LEFT so the penguin appears on the right side of the screen
+    public void RotateQuarterRight()
+    {
+        float newTargetZ = _targetZ;
+        if (newTargetZ >= -_maxRotationAngleClamped && newTargetZ <= _maxRotationAngleClamped)
+        {
+            if (newTargetZ > -_maxRotationAngleClamped && newTargetZ <= _maxRotationAngleUnclamped)
+                newTargetZ -= _maxRotationAngleClamped;
+            else if (newTargetZ == -_maxRotationAngleClamped)
+                newTargetZ = -_maxRotationAngleUnclamped;
+        }
+        else // if penguin is flying
+        {
+            if (newTargetZ == _maxRotationAngleUnclamped) newTargetZ = _maxRotationAngleClamped;
+        }
+        if (newTargetZ != _targetZ)
+        {
+            _targetZ = newTargetZ;
+            LeanTween.rotateZ(this.gameObject, _targetZ, _rotateTime);
+        }
     }
 }

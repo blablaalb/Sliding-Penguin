@@ -27,10 +27,10 @@ public class PlatformChunkManager : GenericPool<PlatformChunk>
     {
         _platformLengthObserver.ReachedThreshold += OnPenguinReachedPlatformEndTreshold;
 
-        // IF we didn't preallocated chunks in the edtor spawn $_spawnAmount chunks.
+        // IF we didn't preallocate chunks in the edtor spawn $_spawnAmount chunks.
         if (!FindLastPlatformChunk())
         {
-            SpawnRandomPlatformChunks(_spawnAmount);
+            SpawnPlatformChunks(_spawnAmount, ChunkDifficulty.Zero);
         }
     }
 
@@ -39,10 +39,12 @@ public class PlatformChunkManager : GenericPool<PlatformChunk>
         _platformLengthObserver.ReachedThreshold -= OnPenguinReachedPlatformEndTreshold;
     }
 
+#if UNITY_EDITOR
     [Button]
-    private PlatformChunk SpawnRandomPlatformChunk()
+#endif
+    private PlatformChunk SpawnPlatformChunk(ChunkDifficulty difficulty)
     {
-        var platformChunk = GetRandomPlatformChunk();
+        var platformChunk = GetPlatformChunk(difficulty);
         platformChunk.SetParent(this.transform);
         Vector3 position = new Vector3(LastPlatformChunk.Position.x, LastPlatformChunk.Position.y, LastPlatformChunk.Position.z + LastPlatformChunk.CalculateLength());
         platformChunk.SetGlobalPosition(position);
@@ -51,20 +53,39 @@ public class PlatformChunkManager : GenericPool<PlatformChunk>
         return platformChunk;
     }
 
-    private PlatformChunk[] SpawnRandomPlatformChunks(int amount)
+    private PlatformChunk[] SpawnPlatformChunks(int amount, ChunkDifficulty difficulty)
     {
         PlatformChunk[] chunks = new PlatformChunk[amount];
         for (int i = 0; i < amount; i++)
         {
-            chunks[i] = SpawnRandomPlatformChunk();
+            chunks[i] = SpawnPlatformChunk(difficulty);
         }
         return chunks;
     }
 
-    private PlatformChunk GetRandomPlatformChunk()
+    private PlatformChunk GetPlatformChunk(ChunkDifficulty difficulty)
     {
-        int indx = Random.Range(0, _platformChunks.Length);
+        int indx = (int)difficulty;
         PlatformChunk chunk = _platformChunks[indx];
+        switch (difficulty)
+        {
+            case ChunkDifficulty.Random:
+                indx = Random.Range(0, _platformChunks.Length);
+                chunk = _platformChunks[indx];
+                break;
+            case ChunkDifficulty.Zero:
+                chunk = _platformChunks.First(x => x.Difficulty == 0);
+                break;
+            case ChunkDifficulty.One:
+                break;
+            case ChunkDifficulty.Two:
+                break;
+            case ChunkDifficulty.Three:
+                break;
+            default:
+                Debug.LogException(new ArgumentException($"Unknown difficulty: {difficulty.ToString()}"));
+                break;
+        }
         prefab = chunk.gameObject;
         chunk = Get();
         return chunk;
@@ -81,6 +102,15 @@ public class PlatformChunkManager : GenericPool<PlatformChunk>
 
     private void OnPenguinReachedPlatformEndTreshold()
     {
-        SpawnRandomPlatformChunks(_spawnAmount);
+        SpawnPlatformChunks(_spawnAmount, ChunkDifficulty.Zero);
+    }
+
+    private enum ChunkDifficulty
+    {
+        Random,
+        Zero,
+        One,
+        Two,
+        Three
     }
 }
