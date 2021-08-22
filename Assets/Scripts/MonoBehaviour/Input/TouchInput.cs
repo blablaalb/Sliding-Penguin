@@ -21,6 +21,7 @@ public class TouchInput : Singleton<TouchInput>, IInput
     [SerializeField]
     private float _smooth = 0.5f;
     private Vector2 _previousPosition;
+    private float _x;
 
 
     /// <summary>
@@ -35,19 +36,23 @@ public class TouchInput : Singleton<TouchInput>, IInput
     protected override void Awake()
     {
         base.Awake();
-        _maxX = Screen.width / 3;
+        _maxX = Screen.width / 4;
         _minX = 0 - _maxX;
         _canSwipe = true;
     }
 
+
     public float GetXAxis()
     {
-        float x = Mathf.Clamp(DeltaPosition().x, -1, 1);
-        float rawx = x;
-        if (x != 0f)
-            x = Mathf.SmoothDamp(_previousX, x, ref _xVelocity, _smooth);
-        _previousX = x;
-        return rawx;
+        // float x = Mathf.Clamp(DeltaPosition().x, -1, 1);
+        // float rawx = x;
+        // if (x != 0f)
+        //     x = Mathf.SmoothDamp(_previousX, x, ref _xVelocity, _smooth);
+        // _previousX = x;
+        // return rawx;
+        float x = _x;
+        _x = 0f;
+        return x;
     }
 
     internal void Update()
@@ -117,13 +122,21 @@ public class TouchInput : Singleton<TouchInput>, IInput
                 if (swipeTime <= _swipeTimeTreshold)
                 {
                     SwipeDirection direction = deltaPosition.x > 0.00f ? SwipeDirection.Right : SwipeDirection.Left;
-                    Swiped?.Invoke(direction);
+                    OnSwiped(direction);
                     _startTime = Time.time;
                     _canSwipe = false;
                 }
             }
         }
         ResetValues();
+    }
+
+    private void OnSwiped(SwipeDirection direction)
+    {
+        Swiped?.Invoke(direction);
+        if (direction == SwipeDirection.Left) _x = 1;
+        else
+        if (direction == SwipeDirection.Right) _x = -1;
     }
 
     private Vector2 DeltaPosition() => _currentPosition - _previousPosition;

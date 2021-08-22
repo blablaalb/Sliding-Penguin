@@ -40,7 +40,7 @@ public class InputManager : Singleton<InputManager>
 
     internal void Update()
     {
-        float x = GetXAxis();
+        float x = -GetXAxis();
         if (x < 0) _platformController.RotateQuarterLeft();
         else 
         if (x > 0) _platformController.RotateQuarterRight();
