@@ -3,11 +3,13 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public class GenericPool<T>  : MonoBehaviour where T : Component
+public abstract class GenericPool<T> : MonoBehaviour, IPool where T : MonoBehaviour
 {
     [SerializeField]
     protected GameObject prefab;
     private Stack<T> _pool;
+
+    public Type MemberType => typeof(T);
 
     virtual protected void Awake()
     {
@@ -43,6 +45,17 @@ public class GenericPool<T>  : MonoBehaviour where T : Component
             obj.gameObject.SetActive(false);
             _pool.Push(obj);
         }
+    }
+
+    public void Add(GameObject go)
+    {
+        var member = go.GetComponent<T>();
+        if (member == null)
+        {
+            Debug.LogException(new ArgumentException($"{go.name} doesn't have component of type {typeof(T).FullName}"));
+            return;
+        }
+        Add(member);
     }
 
     /// <summary>
