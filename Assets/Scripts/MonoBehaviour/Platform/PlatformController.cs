@@ -15,6 +15,8 @@ public class PlatformController : MonoBehaviour
     private float _rotateTime = 0.5f;
     private float _targetZ;
 
+    public float TargetRotation => _targetZ;
+
     /// <summary>
     /// Invoked when the player rotates the platform. Provides direction of the rotation. -1 for left, 1 for right and 0 for no rotation.
     /// </summary>
@@ -77,7 +79,8 @@ public class PlatformController : MonoBehaviour
         if (newTargetZ != _targetZ)
         {
             _targetZ = newTargetZ;
-            LeanTween.rotateZ(this.gameObject, _targetZ, _rotateTime);
+            LeanTween.cancel(this.gameObject);
+            LeanTween.rotateZ(this.gameObject, _targetZ, _rotateTime).setOnComplete(() => SetRotation(_targetZ));
             if (newTargetZ == _maxRotationAngleUnclamped) Flipped?.Invoke(-1);
             else
                 PlatformRotated?.Invoke(-1);
@@ -105,10 +108,16 @@ public class PlatformController : MonoBehaviour
         if (newTargetZ != _targetZ)
         {
             _targetZ = newTargetZ;
-            LeanTween.rotateZ(this.gameObject, _targetZ, _rotateTime);
+            LeanTween.cancel(this.gameObject);
+            LeanTween.rotateZ(this.gameObject, _targetZ, _rotateTime).setOnComplete(() => SetRotation(_targetZ));
             if (newTargetZ == -_maxRotationAngleUnclamped) Flipped?.Invoke(1);
-            else 
-            PlatformRotated?.Invoke(1);
+            else
+                PlatformRotated?.Invoke(1);
         }
+    }
+
+    private void SetRotation(float z)
+    {
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, z));
     }
 }

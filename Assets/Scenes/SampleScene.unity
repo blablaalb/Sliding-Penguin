@@ -382,6 +382,36 @@ MonoBehaviour:
   - {fileID: 3295136264567602968, guid: 7857b108567900b42863c5e35414b2a6, type: 3}
   - {fileID: 2655482479056939244, guid: 7d2d3f5223d946140a984fdc5afa0657, type: 3}
   _spawnAmount: 10
+--- !u!1 &336037004
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 336037005}
+  m_Layer: 2
+  m_Name: Edge Right
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &336037005
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 336037004}
+  m_LocalRotation: {x: 0.074404694, y: -0.2616944, z: -0.020239051, w: 0.96206564}
+  m_LocalPosition: {x: 6.5, y: 6.9, z: -5.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 960767642}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 7.618, y: -30.734, z: -4.507}
 --- !u!1 &379135614
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,6 +443,36 @@ Transform:
   m_Father: {fileID: 250411866}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &414938177
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 414938178}
+  m_Layer: 2
+  m_Name: Edge Left
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &414938178
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 414938177}
+  m_LocalRotation: {x: 0.05360905, y: 0.26672956, z: -0.05542178, w: 0.9606819}
+  m_LocalPosition: {x: -6.5, y: 6.9, z: -5.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 960767642}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 7.618, y: 30.734, z: -4.507}
 --- !u!1 &416838384
 GameObject:
   m_ObjectHideFlags: 0
@@ -834,7 +894,7 @@ GameObject:
   m_Component:
   - component: {fileID: 539369632}
   m_Layer: 2
-  m_Name: Right
+  m_Name: Flipped Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1698,6 +1758,8 @@ Transform:
   - {fileID: 1205204865}
   - {fileID: 539369632}
   - {fileID: 1921766468}
+  - {fileID: 414938178}
+  - {fileID: 336037005}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1988,8 +2050,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1178443bc6699c489112e5dc959d5d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _leftPosition: {fileID: 1205204865}
-  _rightPosition: {fileID: 539369632}
+  _leftFlippedPosition: {fileID: 1205204865}
+  _rightFlippedPosition: {fileID: 539369632}
+  _leftEdgePosition: {fileID: 414938178}
+  _rightEdgePosition: {fileID: 336037005}
   _middlePosition: {fileID: 1921766468}
   _transitionTime: 0.8
 --- !u!1 &969335955
@@ -2031,7 +2095,7 @@ MonoBehaviour:
   bendRotationAxisType: 0
   bendRotationCenter2: {fileID: 0}
   bendRotationCenter2Position: {x: 0, y: 0, z: 0}
-  bendVerticalSize: 24.02
+  bendVerticalSize: 15
   bendVerticalOffset: 10
   bendHorizontalSize: 0
   bendHorizontalOffset: 0
@@ -2624,15 +2688,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1032f51588e52304b8b2c4b3f3511e54, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2.5
+      value: 2.8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1032f51588e52304b8b2c4b3f3511e54, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2.5
+      value: 2.8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1032f51588e52304b8b2c4b3f3511e54, type: 3}
       propertyPath: m_LocalScale.z
-      value: 2.5
+      value: 2.8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1032f51588e52304b8b2c4b3f3511e54, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4152,7 +4216,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1205204865}
   m_Layer: 2
-  m_Name: Left
+  m_Name: Flipped Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5372,7 +5436,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7669897782130945340, guid: 3c1edd7cd4cfdf64e9ce8da1e3a22070, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7669897782130945343, guid: 3c1edd7cd4cfdf64e9ce8da1e3a22070, type: 3}
       propertyPath: m_RootOrder

@@ -8,9 +8,13 @@ using Object = UnityEngine.Object;
 public class CameraController : MonoBehaviour
 {
     [SerializeField]
-    private Transform _leftPosition;
+    private Transform _leftFlippedPosition;
     [SerializeField]
-    private Transform _rightPosition;
+    private Transform _rightFlippedPosition;
+    [SerializeField]
+    private Transform _leftEdgePosition;
+    [SerializeField]
+    private Transform _rightEdgePosition;
     [SerializeField]
     private Transform _middlePosition;
     [SerializeField]
@@ -39,30 +43,51 @@ public class CameraController : MonoBehaviour
 
     private void OnPlatformFlipped(int direction)
     {
-        if (direction == -1) MoveLeft();
+        if (direction == -1) OnFlippedLeft();
         else
-        if (direction == 1) MoveRight();
+        if (direction == 1) OnFlippedRight();
     }
 
     private void OnPlatformRotated(int direction)
     {
-        MoveMiddle();
+        if (_platformController.TargetRotation == 80f) OnMovedLeft();
+        else
+        if (_platformController.TargetRotation == -80f) OnMovedRight();
+        else
+        if (_platformController.TargetRotation == 0f) MoveMiddle();
     }
 
-    private void MoveLeft()
+    private void OnFlippedLeft()
     {
-        LeanTween.moveLocal(this.gameObject, _leftPosition.localPosition, _transitionTime);
-        LeanTween.rotateLocal(this.gameObject, _leftPosition.localRotation.eulerAngles, _transitionTime);
+        LeanTween.cancel(this.gameObject);
+        LeanTween.moveLocal(this.gameObject, _leftFlippedPosition.localPosition, _transitionTime);
+        LeanTween.rotateLocal(this.gameObject, _leftFlippedPosition.localRotation.eulerAngles, _transitionTime);
     }
 
-    private void MoveRight()
+    private void OnFlippedRight()
     {
-        LeanTween.moveLocal(this.gameObject, _rightPosition.localPosition, _transitionTime);
-        LeanTween.rotateLocal(this.gameObject, _rightPosition.localRotation.eulerAngles, _transitionTime);
+        LeanTween.cancel(this.gameObject);
+        LeanTween.moveLocal(this.gameObject, _rightFlippedPosition.localPosition, _transitionTime);
+        LeanTween.rotateLocal(this.gameObject, _rightFlippedPosition.localRotation.eulerAngles, _transitionTime);
+    }
+
+    private void OnMovedRight()
+    {
+        LeanTween.cancel(this.gameObject);
+        LeanTween.moveLocal(this.gameObject, _rightEdgePosition.localPosition, _transitionTime);
+        LeanTween.rotateLocal(this.gameObject, _rightEdgePosition.localRotation.eulerAngles, _transitionTime);
+    }
+
+    private void OnMovedLeft()
+    {
+        LeanTween.cancel(this.gameObject);
+        LeanTween.moveLocal(this.gameObject, _leftEdgePosition.localPosition, _transitionTime);
+        LeanTween.rotateLocal(this.gameObject, _leftEdgePosition.localRotation.eulerAngles, _transitionTime);
     }
 
     private void MoveMiddle()
     {
+        LeanTween.cancel(this.gameObject);
         LeanTween.moveLocal(this.gameObject, _middlePosition.localPosition, _transitionTime);
         LeanTween.rotateLocal(this.gameObject, _middlePosition.localRotation.eulerAngles, _transitionTime);
     }
