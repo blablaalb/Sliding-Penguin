@@ -30,7 +30,7 @@ public class PlatformChunkManager : GenericPool<PlatformChunk>
         // IF we didn't preallocate chunks in the edtor spawn $_spawnAmount chunks.
         if (!FindLastPlatformChunk())
         {
-            SpawnPlatformChunks(_spawnAmount, ChunkDifficulty.Random);
+            SpawnPlatformChunks(_spawnAmount, ChunkDifficulty.Zero);
         }
     }
 
@@ -106,7 +106,7 @@ public class PlatformChunkManager : GenericPool<PlatformChunk>
 
     private void OnPenguinReachedPlatformEndTreshold()
     {
-        SpawnPlatformChunks(_spawnAmount, ChunkDifficulty.Random);
+        SpawnPlatformChunks(_spawnAmount, ChunkDifficulty.Zero);
     }
 
     private enum ChunkDifficulty

@@ -19,6 +19,7 @@ public class PlatformController : MonoBehaviour
     /// Invoked when the player rotates the platform. Provides direction of the rotation. -1 for left, 1 for right and 0 for no rotation.
     /// </summary>
     public event Action<int> PlatformRotated;
+    public event Action<int> Flipped;
 
 
     internal void Awake()
@@ -77,6 +78,9 @@ public class PlatformController : MonoBehaviour
         {
             _targetZ = newTargetZ;
             LeanTween.rotateZ(this.gameObject, _targetZ, _rotateTime);
+            if (newTargetZ == _maxRotationAngleUnclamped) Flipped?.Invoke(-1);
+            else
+                PlatformRotated?.Invoke(-1);
         }
     }
 
@@ -102,6 +106,9 @@ public class PlatformController : MonoBehaviour
         {
             _targetZ = newTargetZ;
             LeanTween.rotateZ(this.gameObject, _targetZ, _rotateTime);
+            if (newTargetZ == -_maxRotationAngleUnclamped) Flipped?.Invoke(1);
+            else 
+            PlatformRotated?.Invoke(1);
         }
     }
 }

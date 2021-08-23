@@ -134,9 +134,10 @@ public class TouchInput : Singleton<TouchInput>, IInput
     private void OnSwiped(SwipeDirection direction)
     {
         Swiped?.Invoke(direction);
-        if (direction == SwipeDirection.Left) _x = 1;
+        if (direction == SwipeDirection.Left) _x = -1;
         else
-        if (direction == SwipeDirection.Right) _x = -1;
+        if (direction == SwipeDirection.Right) _x = 1;
+        Debug.Log(direction.ToString());
     }
 
     private Vector2 DeltaPosition() => _currentPosition - _previousPosition;
