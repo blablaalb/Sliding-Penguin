@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
 using System;
 using UnityEngine;
+using System.Linq;
 
 [Serializable]
 public abstract class GenericPool<T> : MonoBehaviour, IPool where T : MonoBehaviour
 {
     [SerializeField]
     protected GameObject prefab;
-    private Stack<T> _pool;
+    protected List<T> _pool;
 
     public Type MemberType => typeof(T);
 
     virtual protected void Awake()
     {
-        _pool = new Stack<T>(10);
+        _pool = new List<T>(10);
     }
 
     /// <summary>
@@ -25,7 +26,8 @@ public abstract class GenericPool<T> : MonoBehaviour, IPool where T : MonoBehavi
         T obj;
         if (_pool.Count > 0)
         {
-            obj = _pool.Pop();
+            obj = _pool.Last();
+            _pool.Remove(obj);
         }
         else
         {
@@ -43,7 +45,7 @@ public abstract class GenericPool<T> : MonoBehaviour, IPool where T : MonoBehavi
         if (!_pool.Contains(obj))
         {
             obj.gameObject.SetActive(false);
-            _pool.Push(obj);
+            _pool.Add(obj);
         }
     }
 
@@ -62,7 +64,7 @@ public abstract class GenericPool<T> : MonoBehaviour, IPool where T : MonoBehavi
     /// Instantiates a new game object from the given prefab and returns component of the required type.
     /// </summary>
     /// <returns>Required component from the instantiated game object.</returns>
-    private T InstantiateNew()
+    protected T InstantiateNew()
     {
         if (prefab == null)
         {

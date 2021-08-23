@@ -14,6 +14,7 @@ public class PlatformChunkManager : GenericPool<PlatformChunk>
     [Tooltip("Amount of chunks to spawn after player reached the treshold")]
     [SerializeField]
     private int _spawnAmount = 1;
+    private bool _spawned;
 
     public PlatformChunk LastPlatformChunk { get; private set; }
 
@@ -31,7 +32,9 @@ public class PlatformChunkManager : GenericPool<PlatformChunk>
         if (!FindLastPlatformChunk())
         {
             SpawnPlatformChunks(_spawnAmount, ChunkDifficulty.Zero);
+            _spawned = true;
         }
+        else _spawned = true;
     }
 
     internal void OnDestroy()
@@ -46,7 +49,9 @@ public class PlatformChunkManager : GenericPool<PlatformChunk>
     {
         var platformChunk = GetPlatformChunk(difficulty);
         platformChunk.SetParent(this.transform);
-        Vector3 position = new Vector3(LastPlatformChunk.Position.x, LastPlatformChunk.Position.y, LastPlatformChunk.Position.z + LastPlatformChunk.CalculateLength());
+        Vector3 position = Vector3.zero;
+        if (LastPlatformChunk != null)
+            position = new Vector3(LastPlatformChunk.Position.x, LastPlatformChunk.Position.y, LastPlatformChunk.Position.z + LastPlatformChunk.CalculateLength());
         platformChunk.SetGlobalPosition(position);
         platformChunk.SetLocalRotation(Quaternion.identity);
         LastPlatformChunk = platformChunk;
@@ -106,7 +111,20 @@ public class PlatformChunkManager : GenericPool<PlatformChunk>
 
     private void OnPenguinReachedPlatformEndTreshold()
     {
-        SpawnPlatformChunks(_spawnAmount, ChunkDifficulty.Zero);
+        SpawnPlatformChunks(_spawnAmount, ChunkDifficulty.Random);
+    }
+
+    public override PlatformChunk Get()
+    {
+        int difficutly = prefab.GetComponent<PlatformChunk>().Difficulty;
+        if (_pool.Any(x => x.Difficulty == difficutly))
+        {
+            var platformChunk = _pool.First(x => x.Difficulty == difficutly);
+            _pool.Remove(platformChunk);
+            return platformChunk;
+        }
+
+        return InstantiateNew();
     }
 
     private enum ChunkDifficulty

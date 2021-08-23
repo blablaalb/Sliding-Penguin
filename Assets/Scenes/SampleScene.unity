@@ -5370,6 +5370,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Platform Chunk Difficulty 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7669897782130945340, guid: 3c1edd7cd4cfdf64e9ce8da1e3a22070, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7669897782130945343, guid: 3c1edd7cd4cfdf64e9ce8da1e3a22070, type: 3}
       propertyPath: m_RootOrder
       value: 0
