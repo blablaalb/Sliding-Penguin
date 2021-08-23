@@ -30,7 +30,7 @@ public class PlatformChunkManager : GenericPool<PlatformChunk>
         // IF we didn't preallocate chunks in the edtor spawn $_spawnAmount chunks.
         if (!FindLastPlatformChunk())
         {
-            SpawnPlatformChunks(_spawnAmount, ChunkDifficulty.Zero);
+            SpawnPlatformChunks(_spawnAmount, ChunkDifficulty.Random);
         }
     }
 
@@ -66,7 +66,7 @@ public class PlatformChunkManager : GenericPool<PlatformChunk>
     private PlatformChunk GetPlatformChunk(ChunkDifficulty difficulty)
     {
         int indx = (int)difficulty;
-        PlatformChunk chunk = _platformChunks[indx];
+        PlatformChunk chunk = null;
         switch (difficulty)
         {
             case ChunkDifficulty.Random:
@@ -77,10 +77,13 @@ public class PlatformChunkManager : GenericPool<PlatformChunk>
                 chunk = _platformChunks.First(x => x.Difficulty == 0);
                 break;
             case ChunkDifficulty.One:
+                chunk = _platformChunks.First(x => x.Difficulty == 1);
                 break;
             case ChunkDifficulty.Two:
+                chunk = _platformChunks.First(x => x.Difficulty == 2);
                 break;
             case ChunkDifficulty.Three:
+                chunk = _platformChunks.First(x => x.Difficulty == 3);
                 break;
             default:
                 Debug.LogException(new ArgumentException($"Unknown difficulty: {difficulty.ToString()}"));
@@ -88,6 +91,7 @@ public class PlatformChunkManager : GenericPool<PlatformChunk>
         }
         prefab = chunk.gameObject;
         chunk = Get();
+        if (!chunk.gameObject.activeInHierarchy) chunk.gameObject.SetActive(true);
         return chunk;
     }
 
@@ -102,12 +106,12 @@ public class PlatformChunkManager : GenericPool<PlatformChunk>
 
     private void OnPenguinReachedPlatformEndTreshold()
     {
-        SpawnPlatformChunks(_spawnAmount, ChunkDifficulty.Zero);
+        SpawnPlatformChunks(_spawnAmount, ChunkDifficulty.Random);
     }
 
     private enum ChunkDifficulty
     {
-        Random,
+        Random = -1,
         Zero,
         One,
         Two,
