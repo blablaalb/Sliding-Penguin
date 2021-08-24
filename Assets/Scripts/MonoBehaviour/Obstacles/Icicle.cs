@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Icicle : Obstacle
 {
-    [SerializeField]
-    private float _raiseTime = 1f;
     private IcicleParticleSystem _icicleParticleSys;
     private MeshRenderer[] _meshRenderers;
 

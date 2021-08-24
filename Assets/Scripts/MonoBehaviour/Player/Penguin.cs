@@ -14,6 +14,7 @@ public class Penguin : Singleton<Penguin>
     private float _jumpForce;
     private bool _stopped;
     private float _rayRadius;
+    private Invincibility _invincibility;
 
     public Vector3 Position => transform.position;
     public Vector3 Velocity => _rigidBody.velocity;
@@ -24,6 +25,7 @@ public class Penguin : Singleton<Penguin>
         SphereCollider collider = GetComponent<SphereCollider>();
         _rigidBody = GetComponent<Rigidbody>();
         _rayRadius = collider.radius;
+        _invincibility = GetComponent<Invincibility>();
         Obstacle.ObstacleHit += OnObstacleHit;
     }
 
@@ -51,12 +53,13 @@ public class Penguin : Singleton<Penguin>
 
     private void CollectCollectable(ICollectable collectable)
     {
-       collectable.CollectSelf();
+        collectable.CollectSelf();
     }
 
     private void OnObstacleHit(Obstacle obstacle)
     {
-        Stop();
+        if (!_invincibility.Invincible)
+            Stop();
     }
 
     private void MoveForward()
