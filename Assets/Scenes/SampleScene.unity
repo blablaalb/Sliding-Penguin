@@ -338,7 +338,7 @@ MonoBehaviour:
   _maxRotationAngleClamped: 80
   _maxRotationAngleUnclamped: 120
   _run: 0
-  _rotateTime: 0.3
+  _rotateTime: 0.15
 --- !u!114 &250411869
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4077,7 +4077,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1193719687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4954,7 +4954,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -5436,7 +5436,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7669897782130945340, guid: 3c1edd7cd4cfdf64e9ce8da1e3a22070, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7669897782130945343, guid: 3c1edd7cd4cfdf64e9ce8da1e3a22070, type: 3}
       propertyPath: m_RootOrder
@@ -5789,7 +5789,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 5}
   m_SizeDelta: {x: 58.00244, y: 29.00122}
   m_Pivot: {x: 0.5, y: 0.5}

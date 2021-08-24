@@ -6,23 +6,28 @@ public class Icicle : Obstacle
 {
     [SerializeField]
     private float _raiseTime = 1f;
-    [SerializeField]
-    private IcicleParticleSystem _dustParticleSystem;
+    private IcicleParticleSystem _icicleParticleSys;
+    private MeshRenderer[] _meshRenderers;
 
-    private void Start()
+    override protected void Awake()
     {
-        // Raise();
+        _meshRenderers = GetComponentsInChildren<MeshRenderer>();
+        _icicleParticleSys = GetComponent<IcicleParticleSystem>();
+        base.Awake();
     }
 
-    public void Raise()
+    override protected void OnCollisionEnter(Collision other)
     {
-        LeanTween.moveLocalY(this.gameObject, 0f, _raiseTime);
-        _dustParticleSystem.Play();
+        base.OnCollisionEnter(other);
+        _icicleParticleSys.Play();
+        Disable();
     }
 
-    public override void Spawn()
+    private void Disable()
     {
-        // Raise();
+        foreach (var mr in _meshRenderers)
+        {
+            mr.enabled = false;
+        }
     }
-
 }

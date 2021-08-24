@@ -4,22 +4,23 @@ using UnityEngine;
 
 public class IcicleParticleSystem : MonoBehaviour
 {
-    private ParticleSystem _particleSystem;
-    private Vector3 _defaultLocalPosition;
+    [SerializeField]
+    private ParticleSystem[] _particleSystems;
+    private AudioSource _audSource;
+    [SerializeField]
+    private AudioClip _epxlosionAudClip;
 
     internal void Awake()
     {
-        _particleSystem = GetComponent<ParticleSystem>();
-        _defaultLocalPosition = transform.localPosition;
-    }
-
-    internal void Update()
-    {
-        transform.localPosition = _defaultLocalPosition;
+        // _particleSystems = GetComponentsInChildren<ParticleSystem>();
+        _audSource = GetComponent<AudioSource>();
     }
 
     public void Play()
     {
-        _particleSystem.Play();
+        foreach (var particle in _particleSystems)
+            particle.Play();
+
+        _audSource.PlayOneShot(_epxlosionAudClip);
     }
 }
